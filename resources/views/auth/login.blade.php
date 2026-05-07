@@ -7,9 +7,14 @@
     <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="mx-auto h-10 w-auto" />
     <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Sign in to your account</h2>
   </div>
-
+@if ($errors->any())
+  @foreach ($errors->all() as $error )
+        <p class="text-red-500">{{ $error }}</p>
+  @endforeach
+@endif
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
     <form action="{{ route('action.login') }}" method="POST" class="space-y-6">
+      @csrf
       <div>
         <label for="email" class="block text-sm/6 font-medium text-gray-100">Email address</label>
         <div class="mt-2">

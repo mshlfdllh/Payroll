@@ -16,7 +16,7 @@ class AuthController extends Controller
             if(Auth::user()->role == 'admin'){
                 return redirect('/admin')->with('message','berhasil login sebagai admin');
             }elseif(Auth::user()->role == 'user' ){
-
+                return redirect('/attendance')->with('message','berhasil login sebagai user');
             }
             
         }else{
@@ -25,9 +25,25 @@ class AuthController extends Controller
     }
 
     public function actionLogin(Request $request){
-            $request->validate([
+         $credential =   $request->validate([
                 'email' => 'required|email',
                 'password'=>'required'
             ]);
+
+            if(Auth::attempt($credential))  {
+                if(Auth::user()->role == 'admin'){
+                    return redirect('/admin')->with('message','berhasil login sebagai admin');
+                }elseif(Auth::user()->role == 'user'){
+                     return redirect('/attendance')->with('message','berhasil login sebagai user');
+                }
+            }else{
+                return redirect()->back()->with('message','email dan password tidak sesuai');
+            }
+
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('/')->with('message','berhasil logout');
     }
 }
