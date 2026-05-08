@@ -9,7 +9,6 @@ Route::get('/logout',[AuthController::class, 'logout'])->name('logout');
 // Routing admin
 Route::middleware(['role:admin'])->group(function()  {
 
-
 Route::get('/admin', function () {
     return view('admin.index');
 });
@@ -27,6 +26,10 @@ Route::get('/payroll',function(){
 });
 });
 // END ROUTING ADMIN
+Route::middleware(['role:user'])->group(function()  {
+
 Route::get('/attendance', function(){
     return view('user.kehadiran');
+});
+
 });
