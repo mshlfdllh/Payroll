@@ -33,6 +33,12 @@ class Employee extends Component
         
         ModelsEmployee::create($validate);
         session()->flash('message','berhasil menambah employee');
+
+        $this->reset([
+        'user_id',
+        'position_id',
+        'salary'
+]);
     }
 
     public function destroy($id){

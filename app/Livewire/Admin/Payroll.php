@@ -15,13 +15,18 @@ class Payroll extends Component
     public $period;
     public $allowance;
     public $deduction;
+    public $keyword;
 
     public function render()
-    {
-        $employees = Employee::all(); 
-        $payrolls = ModelsPayroll::all();
-        return view('livewire.admin.payroll', compact('payrolls','employees'));
-    }
+{
+    $employees = Employee::all();
+
+    $payrolls = ModelsPayroll::whereHas('employee.user', function($query) {
+        $query->where('name', 'like', '%' . $this->keyword . '%');
+    })->get();
+
+    return view('livewire.admin.payroll', compact('payrolls', 'employees'));
+}
 
     public function store(){
         $validate = $this->validate([
@@ -40,12 +45,16 @@ class Payroll extends Component
             'net_salary' => $employee->salary + $this->allowance - $this->deduction
         ]);
         session()->flash('message','Berhasil menambah payroll');
+
+         $this->reset(['employee_id', 'period', 'allowance', 'deduction']);
+        $this->dispatch('payroll-stored'); // ← triggers the SweetAlert
     }
 
     public function destroy($id){
         $payroll = ModelsPayroll::find($id);
         $payroll->delete();
-        session()->flash('message','data berhasil dihapu s');
+        session()->flash('message','data berhasil dihapus');
+        $this->dispatch('payroll-deleted'); // ← triggers the SweetAlert
     }
 
     public function edit($id){
@@ -87,5 +96,6 @@ class Payroll extends Component
         ]);
         session()->flash('message','berhasil update data');
         $this->clear();
+        $this->dispatch('payroll-updated'); // ← triggers the SweetAlert
     }
 }  

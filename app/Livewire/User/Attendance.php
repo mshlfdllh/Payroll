@@ -12,20 +12,22 @@ class Attendance extends Component
 
     public function render()
     {
-        return view('livewire.user.attendance');
+        $attendances = ModelsAttendance::all();
+        return view('livewire.user.attendance', compact('attendances'));
     }
 
-    public function save(){
+    public function store()
+    {
         $this->validate([
-            'status'=>'required'
+            'status' => 'required'
         ]);
 
         ModelsAttendance::create([
-            'user_id'=> Auth::user()->id,
-            'date'=> now()->toDateString(),
-            'status'=> $this->status
+            'user_id' => Auth::user()->id,
+            'date'    => now()->toDateString(),
+            'status'  => $this->status
         ]);
-        // dd($this->status);
-        session()->flash('message','berhasil tambah attendance');
+
+        session()->flash('message', 'Berhasil tambah attendance');
     }
 }

@@ -28,12 +28,15 @@ class Position extends Component
 
         ModelsPosition::create($validated);
         session()->flash('message','berhasil menambah data');
+        $this->reset(['name']);
+        $this->dispatch('position-added');
     }
 
     public function destroy($id){
         $position = ModelsPosition::find($id);
         $position->delete();
         session()->flash('message','berhasil menghapus data');
+        $this->dispatch('position-deleted');
     }
 
     public function edit($id){
@@ -58,6 +61,7 @@ class Position extends Component
         $position->update($validate);
         session()->flash('message','berhasil update data');
         $this->clear();
+        $this->dispatch('position-updated');
     }
 
 }

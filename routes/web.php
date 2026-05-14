@@ -24,6 +24,10 @@ Route::get('/user',function(){
 Route::get('/payroll',function(){
     return view('admin.payroll');
 });
+Route::get('/admin.attendance',function(){
+    return view('admin.attendance');
+});
+
 });
 // END ROUTING ADMIN
 Route::middleware(['role:user'])->group(function()  {
